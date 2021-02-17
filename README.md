@@ -70,3 +70,25 @@ JavaScript console.
 ahc-cabal new-build exe:hello-world
 ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/hello-world/opt/build/hello-world/hello-world --browser --bundle --output-directory /workspace/web/
 ```
+
+## Calling JS
+
+**What**: This is the example for calling JavaScript from Haskell provided by
+[Tweag on their blog](https://www.tweag.io/blog/2018-09-12-asterius-ffi/). It
+shows how JavaScript expressions can be called from Haskell and how the result
+can be retrieved.
+
+When passing values to and from JavaScript, take notice of their type.
+Primitives such as `Double`, `Int`, `Char`, and `Bool` can be passed freely. All
+other types will be `JSVal`, or one of its `newtype`.
+
+Notice that the package `asterius-prelude` must be specified in the cabal file
+in order to access `Asterius.Types.JSVal`.
+
+**Where**: `./calling-js`
+
+**How**: Compile with the following commands (watch out for version changes)
+```sh
+ahc-cabal new-build exe:calling-js
+ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js/opt/build/calling-js/calling-js --browser --bundle --output-directory /workspace/web/
+```

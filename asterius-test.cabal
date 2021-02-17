@@ -22,3 +22,14 @@ executable hello-world
   build-depends:       base >= 4.12.0.0
   hs-source-dirs:      hello-world
   default-language:    Haskell2010
+
+executable calling-js
+  main-is:             Main.hs
+  -- other-modules:
+  -- other-extensions:
+  build-depends:
+      base >= 4.12.0.0
+    , asterius-prelude == 0.0.1
+  hs-source-dirs:      calling-js
+  default-language:    Haskell2010
+
