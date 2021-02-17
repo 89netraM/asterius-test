@@ -58,6 +58,8 @@ npx lite-server
 It should open a browser window for you. In it, change the address to access the
 generated HTML file. (Probably something like `http://127.0.0.1:3000/xxx.html`.)
 
+Once the web page is open, check the Dev Console for any result.
+
 ## Examples
 
 ### Hello World
@@ -93,6 +95,35 @@ and [Syntax of `foreign import javascript`](###Syntax-of-foreign-import-javascri
 ahc-cabal new-build exe:calling-js
 ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js/opt/build/calling-js/calling-js --browser --bundle --output-directory /workspace/web/
 ```
+
+### Calling HS
+
+**What**: This is the example for calling Haskell from JavaScript provided by
+[Tweag on their blog](https://www.tweag.io/blog/2018-09-12-asterius-ffi/). Is
+show how to export functions from Haskell, and how to call them from JavaScript.
+
+Watch out! Things do not work as advertised here.
+
+**Read more**: [What entry JavaScript files do](https://asterius.netlify.app/ahc-link.html#input-mjs-arg)
+
+**Where**: `./calling-hs`
+
+**How**: Compile with the following commands.  
+Exporting functions does not currently work with `ahc-dist`, see [tweag/asterius#686](https://github.com/tweag/asterius/issues/686),
+and we will therefore use `ahc-link` for this.  
+Notice the flags for exporting functions `--export-function <function_name>`,
+and for setting the entry JavaScript file `--input-mjs <path/to/entry.mjs>`.
+```sh
+ahc-link --input-hs ./calling-hs/Main.hs \
+	--browser \
+	--bundle \
+	--output-directory /workspace/web/ \
+	--input-mjs ./calling-hs/calling-hs.mjs \
+	--export-function mult_hs \
+	--output-prefix calling-hs
+```
+Because of `ahc-link` the output files will be called "Main" if not for the
+`--output-prefix` argument.
 
 ## Explanations
 
