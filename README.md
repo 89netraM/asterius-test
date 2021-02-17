@@ -58,7 +58,9 @@ npx lite-server
 It should open a browser window for you. In it, change the address to access the
 generated HTML file. (Probably something like `http://127.0.0.1:3000/xxx.html`.)
 
-## Hello World
+## Examples
+
+### Hello World
 
 **What**: A simple Hello World Haskell program using `putStdLn` to print to the
 JavaScript console.
@@ -71,19 +73,18 @@ ahc-cabal new-build exe:hello-world
 ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/hello-world/opt/build/hello-world/hello-world --browser --bundle --output-directory /workspace/web/
 ```
 
-## Calling JS
+### Calling JS
 
 **What**: This is the example for calling JavaScript from Haskell provided by
 [Tweag on their blog](https://www.tweag.io/blog/2018-09-12-asterius-ffi/). It
 shows how JavaScript expressions can be called from Haskell and how the result
 can be retrieved.
 
-When passing values to and from JavaScript, take notice of their type.
-Primitives such as `Double`, `Int`, `Char`, and `Bool` can be passed freely. All
-other types will be `JSVal`, or one of its `newtype`.
-
 Notice that the package `asterius-prelude` must be specified in the cabal file
 in order to access `Asterius.Types.JSVal`.
+
+**Read more**: [`JSVal` and other shared types](###JSVal-and-other-shared-types)
+and [Syntax of `foreign import javascript`](###Syntax-of-foreign-import-javascript)
 
 **Where**: `./calling-js`
 
@@ -92,3 +93,34 @@ in order to access `Asterius.Types.JSVal`.
 ahc-cabal new-build exe:calling-js
 ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js/opt/build/calling-js/calling-js --browser --bundle --output-directory /workspace/web/
 ```
+
+## Explanations
+
+### `JSVal` and other shared types
+
+When passing values to and from JavaScript, take notice of their type.
+Primitives such as `Double`, `Int`, `Char`, and `Bool` can be passed freely. All
+other types will be `JSVal`, or one of its `newtype`.
+
+### Syntax of `foreign import javascript`
+
+The syntax for defining JavaScript expressions callable from Haskell looks like
+this:
+
+```haskell
+foreign import javascript "<expression>" <haskell_name> :: <haskell_type>
+```
+
+Where `<expression>` is any JavaScript expression. The type (`<haskell_type>`)
+should always return some kind of `IO`, it can be a function taking any number
+of ["shared types"](###JSVal-and-other-shared-types) arguments.
+
+Arguments will be inserted into the expression at `$n` symbols. Where `n` is the
+one based index of the argument. The same index can be used multiple times.
+
+An example:
+```haskell
+foreign import javascript "$1 + $1" js_duplicate :: Double -> IO Double
+```
+This function will take one `Double` and have JavaScript return the duplicated
+value.
