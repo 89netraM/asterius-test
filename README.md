@@ -143,6 +143,24 @@ ahc-link --input-hs ./calling-hs/Main.hs \
 Because of `ahc-link` the output files will be called "Main" if not for the
 `--output-prefix` argument.
 
+### Passing Objects
+
+**What**: This example shows how we can use [`aeson`](https://hackage.haskell.org/package/aeson)
+to pass values, other than te primitives, between Haskell and JavaScript.
+
+Notice that the packages `asterius-prelude` and `aeson` must be specified in the
+cabal file.
+
+**Read more**: [Converting Objects](###Converting-Objects)
+
+**Where**: `./passing-objects`
+
+**How**: Compile with the following commands (watch out for version changes)
+```sh
+ahc-cabal build exe:passing-objects
+ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/passing-objects/opt/build/passing-objects/passing-objects --browser --bundle --output-directory /workspace/web/
+```
+
 ## Explanations
 
 ### `JSVal` and other shared types
@@ -150,6 +168,9 @@ Because of `ahc-link` the output files will be called "Main" if not for the
 When passing values to and from JavaScript, take notice of their type.
 Primitives such as `Double`, `Int`, `Char`, and `Bool` can be passed freely. All
 other types will be `JSVal`, or one of its `newtype`.
+
+Read [Converting Objects](###Converting-Objects) to learn more about passing
+complex data structures between Haskell and JavaScript.
 
 ### Syntax of `foreign import javascript`
 
@@ -187,3 +208,22 @@ The JavaScript expression in asynchronous cases must return a `Promise`. The
 function will return control to Haskell when the promise is resolved. If the
 promise is rejected, a `JSException` will be thrown. Read more about exception
 handling [in the documentation](https://asterius.netlify.app/jsffi.html#error-handling-in-jsffi-imports).
+
+### Converting Objects
+
+When passing values between Haskell and JavaScript, they must either be of one
+of the [primitive types](###JSVal-and-other-shared-types) or of the reference
+type `JSVal`.
+
+To convert a Haskell type to `JSVal` we can use Asterius
+`jsonToJSVal` function. For this to work the type must be an instance of
+`aeson`s `ToJSON` class.
+
+Like wise we can use Asterius `jsonFromJSVal` to convert from `JSVal` to a
+Haskell type. But only if that type is an instance of `aeson`s `FromJSON` class.
+
+Converting to and from `JSVal` is expensive, and doing so should be kept to a
+minimum.
+
+The introduction to the `aeson` library on Hackage gives an overview of how to
+write instances of `ToJSON` and `FromJSON`. [`Data.Aeson` on Hackage](https://hackage.haskell.org/package/aeson-1.5.5.1/docs/Data-Aeson.html).
