@@ -96,6 +96,24 @@ ahc-cabal new-build exe:calling-js
 ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js/opt/build/calling-js/calling-js --browser --bundle --output-directory /workspace/web/
 ```
 
+### Calling JS async
+
+**What**: This example shows how we can call asynchronous JavaScript code, in
+the for of a `Promise`, and make Haskell wait for it to resolve.  
+It just uses `setTimeout` to wait the specified amount of milliseconds, but more
+involved examples can be made.
+
+**Read more**: [Syntax of `foreign import javascript`](###Syntax-of-foreign-import-javascript)
+and [Async JavaScript](###Async-JavaScript)
+
+**Where**: `./calling-js-async`
+
+**How**: Compile with the following commands (watch out for version changes)
+```sh
+ahc-cabal new-build exe:calling-js-async
+ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js-async/opt/build/calling-js-async/calling-js-async --browser --bundle --output-directory /workspace/web/
+```
+
 ### Calling HS
 
 **What**: This is the example for calling Haskell from JavaScript provided by
@@ -155,3 +173,17 @@ foreign import javascript "$1 + $1" js_duplicate :: Double -> IO Double
 ```
 This function will take one `Double` and have JavaScript return the duplicated
 value.
+
+### Async JavaScript
+
+The syntax for calling asynchronous Javascript is the same as with other
+JavaScript, but with the addition of the `safe` keyword,
+
+```haskell
+foreign import javascript safe "<expression>" <haskell_name> :: <haskell_type>
+```
+
+The JavaScript expression in asynchronous cases must return a `Promise`. The
+function will return control to Haskell when the promise is resolved. If the
+promise is rejected, a `JSException` will be thrown. Read more about exception
+handling [in the documentation](https://asterius.netlify.app/jsffi.html#error-handling-in-jsffi-imports).
