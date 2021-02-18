@@ -1,7 +1,7 @@
 # asterius-test
 
 A collection of example projects for [Asterius](https://github.com/tweag/asterius/)
-that are working as of 2021-02-17.
+that are working as of 2021-02-18.
 
 ## Getting started
 
@@ -26,17 +26,19 @@ how you do it:
    Together they take about 20 minutes, and then you ready.
 
 Well up and running, you should use `ahc-cabal` instead of `cabal` to compile
-the project, we've also have a flag for activating the WASM features.
-Building the executable should look like this now:
+the project. Building the executable should look like this now:
 ```sh
-ahc-cabal new-build exe:xxx --flags="wasm"
+ahc-cabal new-build exe:xxx
 ```
+Where `xxx` is the name of the executable you want to build.
 
 But building targeting WASM doesn't actually get us anything useful. To
 transform the output to `.wasm` and `.js` you can use `ahc-dist`. First, step
 into the directory where you want the output, then run the following command:
 ```sh
-ahc-dist --input-exe path/to/xxx --browser --bundle --output-directory /workspace/web/
+ahc-dist --browser --bundle \
+	--output-directory /workspace/web/ \
+	--input-exe path/to/xxx
 ```
 The `--input-exe` is the path to the output executable of building the project.
 The `--output-directory` argument is an absolute path to where you want the
@@ -72,7 +74,9 @@ JavaScript console.
 **How**: Compile with the following commands (watch out for version changes)
 ```sh
 ahc-cabal new-build exe:hello-world
-ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/hello-world/opt/build/hello-world/hello-world --browser --bundle --output-directory /workspace/web/
+ahc-dist --browser --bundle \
+	--output-directory /workspace/web/ \
+	--input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/hello-world/opt/build/hello-world/hello-world
 ```
 
 ### Calling JS
@@ -93,7 +97,9 @@ and [Syntax of `foreign import javascript`](###Syntax-of-foreign-import-javascri
 **How**: Compile with the following commands (watch out for version changes)
 ```sh
 ahc-cabal new-build exe:calling-js
-ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js/opt/build/calling-js/calling-js --browser --bundle --output-directory /workspace/web/
+ahc-dist --browser --bundle \
+	--output-directory /workspace/web/ \
+	--input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js/opt/build/calling-js/calling-js
 ```
 
 ### Calling JS async
@@ -111,7 +117,9 @@ and [Async JavaScript](###Async-JavaScript)
 **How**: Compile with the following commands (watch out for version changes)
 ```sh
 ahc-cabal new-build exe:calling-js-async
-ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js-async/opt/build/calling-js-async/calling-js-async --browser --bundle --output-directory /workspace/web/
+ahc-dist --browser --bundle \
+	--output-directory /workspace/web/ \
+	--input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/calling-js-async/opt/build/calling-js-async/calling-js-async
 ```
 
 ### Calling HS
@@ -132,13 +140,12 @@ and we will therefore use `ahc-link` for this.
 Notice the flags for exporting functions `--export-function <function_name>`,
 and for setting the entry JavaScript file `--input-mjs <path/to/entry.mjs>`.
 ```sh
-ahc-link --input-hs ./calling-hs/Main.hs \
-	--browser \
-	--bundle \
-	--output-directory /workspace/web/ \
+ahc-link --browser --bundle \
 	--input-mjs ./calling-hs/calling-hs.mjs \
 	--export-function mult_hs \
-	--output-prefix calling-hs
+	--output-prefix calling-hs \
+	--output-directory /workspace/web/ \
+	--input-hs ./calling-hs/Main.hs
 ```
 Because of `ahc-link` the output files will be called "Main" if not for the
 `--output-prefix` argument.
@@ -158,7 +165,9 @@ cabal file.
 **How**: Compile with the following commands (watch out for version changes)
 ```sh
 ahc-cabal build exe:passing-objects
-ahc-dist --input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/passing-objects/opt/build/passing-objects/passing-objects --browser --bundle --output-directory /workspace/web/
+ahc-dist --browser --bundle \
+	--output-directory /workspace/web/ \
+	--input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/passing-objects/opt/build/passing-objects/passing-objects
 ```
 
 ## Explanations
