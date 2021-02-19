@@ -89,8 +89,8 @@ can be retrieved.
 Notice that the package `asterius-prelude` must be specified in the cabal file
 in order to access `Asterius.Types.JSVal`.
 
-**Read more**: [`JSVal` and other shared types](###JSVal-and-other-shared-types)
-and [Syntax of `foreign import javascript`](###Syntax-of-foreign-import-javascript)
+**Read more**: [`JSVal` and other shared types](#JSVal-and-other-shared-types)
+and [Syntax of `foreign import javascript`](#Syntax-of-foreign-import-javascript)
 
 **Where**: `./calling-js`
 
@@ -109,8 +109,8 @@ the for of a `Promise`, and make Haskell wait for it to resolve.
 It just uses `setTimeout` to wait the specified amount of milliseconds, but more
 involved examples can be made.
 
-**Read more**: [Syntax of `foreign import javascript`](###Syntax-of-foreign-import-javascript)
-and [Async JavaScript](###Async-JavaScript)
+**Read more**: [Syntax of `foreign import javascript`](#Syntax-of-foreign-import-javascript)
+and [Async JavaScript](#Async-JavaScript)
 
 **Where**: `./calling-js-async`
 
@@ -158,7 +158,7 @@ to pass values, other than te primitives, between Haskell and JavaScript.
 Notice that the packages `asterius-prelude` and `aeson` must be specified in the
 cabal file.
 
-**Read more**: [Converting Objects](###Converting-Objects)
+**Read more**: [Converting Objects](#Converting-Objects)
 
 **Where**: `./passing-objects`
 
@@ -178,7 +178,7 @@ Click anywhere on the page to activate it and see the result in the Dev Console.
 
 Notice that the packages `asterius-prelude` must be specified in the cabal file.
 
-**Read more**: [Creating callbacks](###Creating-callbacks)
+**Read more**: [Creating callbacks](#Creating-callbacks)
 
 **Where**: `./callback`
 
@@ -198,7 +198,7 @@ When passing values to and from JavaScript, take notice of their type.
 Primitives such as `Double`, `Int`, `Char`, and `Bool` can be passed freely. All
 other types will be `JSVal`, or one of its `newtype`.
 
-Read [Converting Objects](###Converting-Objects) to learn more about passing
+Read [Converting Objects](#Converting-Objects) to learn more about passing
 complex data structures between Haskell and JavaScript.
 
 ### Syntax of `foreign import javascript`
@@ -212,7 +212,7 @@ foreign import javascript "<expression>" <haskell_name> :: <haskell_type>
 
 Where `<expression>` is any JavaScript expression. The type (`<haskell_type>`)
 should always return some kind of `IO`, it can be a function taking any number
-of ["shared types"](###JSVal-and-other-shared-types) arguments.
+of ["shared types"](#JSVal-and-other-shared-types) arguments.
 
 Arguments will be inserted into the expression at `$n` symbols. Where `n` is the
 one based index of the argument. The same index can be used multiple times.
@@ -241,7 +241,7 @@ handling [in the documentation](https://asterius.netlify.app/jsffi.html#error-ha
 ### Converting Objects
 
 When passing values between Haskell and JavaScript, they must either be of one
-of the [primitive types](###JSVal-and-other-shared-types) or of the reference
+of the [primitive types](#JSVal-and-other-shared-types) or of the reference
 type `JSVal`.
 
 To convert a Haskell type to `JSVal` we can use Asterius
@@ -261,7 +261,7 @@ write instances of `ToJSON` and `FromJSON`. [`Data.Aeson` on Hackage](https://ha
 
 Asterius includes a special kind of `foreign import` for "converting" a Haskell
 function into a JavaScript function. This syntax works for functions with any
-number of `JSVal` (or [primitives](###JSVal-and-other-shared-types)) arguments.
+number of `JSVal` (or [primitives](#JSVal-and-other-shared-types)) arguments.
 The syntax looks as follows:
 
 ```haskell
