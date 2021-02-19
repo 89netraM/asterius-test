@@ -170,6 +170,26 @@ ahc-dist --browser --bundle \
 	--input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/passing-objects/opt/build/passing-objects/passing-objects
 ```
 
+### Callback
+
+**What**: This example shows how we can pass Haskell functions as callbacks to
+JavaScript. A Haskell callback is added to `onClick` event of the document.
+Click anywhere on the page to activate it and see the result in the Dev Console.
+
+Notice that the packages `asterius-prelude` must be specified in the cabal file.
+
+**Read more**: [Creating callbacks](###Creating-callbacks)
+
+**Where**: `./callback`
+
+**How**: Compile with the following commands (watch out for version changes)
+```sh
+ahc-cabal build exe:callback
+ahc-dist --browser --bundle \
+	--output-directory /workspace/web/ \
+	--input-exe ./dist-newstyle/build/x86_64-linux/ghc-8.8.4/asterius-test-0.1.0.0/x/callback/opt/build/callback/callback
+```
+
 ## Explanations
 
 ### `JSVal` and other shared types
@@ -236,3 +256,28 @@ minimum.
 
 The introduction to the `aeson` library on Hackage gives an overview of how to
 write instances of `ToJSON` and `FromJSON`. [`Data.Aeson` on Hackage](https://hackage.haskell.org/package/aeson-1.5.5.1/docs/Data-Aeson.html).
+
+### Creating callbacks
+
+Asterius includes a special kind of `foreign import` for "converting" a Haskell
+function into a JavaScript function. This syntax works for functions with any
+number of `JSVal` (or [primitives](###JSVal-and-other-shared-types)) arguments.
+The syntax looks as follows:
+
+```haskell
+foreign import javascript "wrapper" js_makeCallback :: (<function_type>) -> IO JSVal
+```
+
+Any Haskell function be "converted" into a JavaScript callback, including
+partially applied function.
+
+Here follows an example where a function of type `Int -> Int` ic converted into
+a JavaScript callback. In JavaScript, callbacks created this way will be
+asynchronous and they must be awaited to retrieve their result.
+
+```haskell
+foreign import javascript "wrapper" js_makeCallbackIntInt :: (Int -> Int) -> IO JSVal
+```
+
+More information about creating callbacks can be found in [the official
+documentation](https://asterius.netlify.app/jsffi.html#jsffi-dynamic-exports).
